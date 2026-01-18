@@ -126,62 +126,115 @@
             min-height: 400px;
         }
         
+        
         /* Анимированный круг */
-        .glowing-circle {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            border: 3px solid var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 40px var(--primary-glow);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-        
-        .glowing-circle.active {
-            transform: scale(1.1);
-            box-shadow: 0 0 60px var(--primary-glow);
-        }
-        
-        .glowing-circle.hidden {
-            opacity: 0;
-            transform: scale(0.5);
-            pointer-events: none;
-        }
-        
-        .circle-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 25px;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .circle-content h2 {
-            color: var(--text-primary);
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            font-family: var(--font-logo);
-            font-weight: 700;
-        }
-        
-        .circle-content p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin: 5px 0;
-            max-width: 80%;
-        }
+.glowing-circle {
+    width: 300px; /* Было 250px */
+    height: 300px; /* Было 250px */
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 4px solid var(--primary); /* Было 3px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 
+        0 0 50px var(--primary-glow),
+        0 0 100px rgba(255, 107, 53, 0.2); /* Добавил вторую тень */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    margin: 30px 0; /* Увеличил отступ */
+}
+
+.glowing-circle::before {
+    content: '';
+    position: absolute;
+    width: 400px; /* Было 350px */
+    height: 400px; /* Было 350px */
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    animation: pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulse {
+    0% { 
+        opacity: 0.3; 
+        transform: scale(0.9); 
+    }
+    100% { 
+        opacity: 0.8; /* Было 0.6 */
+        transform: scale(1.2); /* Было 1.1 */
+    }
+}
+
+.glowing-circle:hover {
+    transform: scale(1.15); /* Было 1.1 */
+    box-shadow: 
+        0 0 80px var(--primary-glow),
+        0 0 150px rgba(255, 107, 53, 0.3),
+        inset 0 0 20px rgba(255, 107, 53, 0.1); /* Добавил внутреннее свечение */
+    border-width: 5px; /* Увеличиваю границу при наведении */
+}
+
+.glowing-circle.active {
+    transform: scale(1.2);
+    box-shadow: 
+        0 0 100px var(--primary-glow),
+        0 0 200px rgba(255, 107, 53, 0.4);
+}
+
+.circle-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px; /* Было 25px */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px; /* Добавил отступы между элементами */
+}
+
+.circle-content h2 {
+    color: var(--text-primary);
+    font-size: 2rem; /* Было 1.8rem */
+    margin-bottom: 5px;
+    font-family: var(--font-logo);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.circle-content p {
+    color: var(--text-secondary);
+    font-size: 1.1rem; /* Было 0.95rem */
+    margin: 3px 0;
+    max-width: 90%;
+    line-height: 1.4;
+}
+
+/* Статус индикатор */
+.status-indicator {
+    width: 20px; /* Было 15px */
+    height: 20px; /* Было 15px */
+    background-color: var(--primary);
+    border-radius: 50%;
+    margin: 0 auto 20px; /* Увеличил отступ */
+    box-shadow: 0 0 15px var(--primary); /* Было 10px */
+    animation: statusPulse 1.5s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 15px var(--primary);
+    }
+    50% { 
+        transform: scale(1.2);
+        box-shadow: 0 0 25px var(--primary);
+    }
+}
         
         /* Полноэкранный опросник */
         .fullscreen-quiz {
