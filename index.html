@@ -1,24 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOX</title>
-    
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="logomini.png">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Шрифты -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@700&family=Oswald:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Цветовая палитра - оранжевая тема */
             --primary: #FF6B35;
             --primary-dark: #D45A2C;
             --primary-light: #FF8C5A;
@@ -29,19 +21,14 @@
             --text-primary: #FFFFFF;
             --text-secondary: #CCCCCC;
             --text-dim: #888888;
-            
-            /* Шрифты */
             --font-logo: 'Zalando Sans Expanded', sans-serif;
             --font-main: 'Oswald', sans-serif;
-            
-            /* Тема по умолчанию (темная) */
             --theme-bg: #121212;
             --theme-card: #1A1A1A;
             --theme-text: #FFFFFF;
             --theme-border: #333333;
         }
         
-        /* Светлая тема */
         .light-theme {
             --theme-bg: #F8F8F8;
             --theme-card: #FFFFFF;
@@ -68,6 +55,47 @@
             padding: 20px;
             overflow-x: hidden;
             position: relative;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Управление темой */
+        .theme-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--theme-border);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .theme-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
         
         /* Логотип и заголовок */
@@ -119,7 +147,7 @@
             font-weight: 300;
         }
         
-        /* Главный экран с кругом */
+        /* Главный экран */
         .main-screen {
             display: flex;
             flex-direction: column;
@@ -131,117 +159,91 @@
             min-height: 400px;
         }
         
-        
         /* Анимированный круг */
-.glowing-circle {
-    width: 300px; /* Было 250px */
-    height: 300px; /* Было 250px */
-    border-radius: 50%;
-    background: var(--card-bg);
-    border: 4px solid var(--primary); /* Было 3px */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 
-        0 0 50px var(--primary-glow),
-        0 0 100px rgba(255, 107, 53, 0.2); /* Добавил вторую тень */
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    margin: 30px 0; /* Увеличил отступ */
-}
-
-.glowing-circle::before {
-    content: '';
-    position: absolute;
-    width: 400px; /* Было 350px */
-    height: 400px; /* Было 350px */
-    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-    animation: pulse 2s infinite alternate ease-in-out;
-}
-
-@keyframes pulse {
-    0% { 
-        opacity: 0.3; 
-        transform: scale(0.9); 
-    }
-    100% { 
-        opacity: 0.8; /* Было 0.6 */
-        transform: scale(1.2); /* Было 1.1 */
-    }
-}
-
-.glowing-circle:hover {
-    transform: scale(1.15); /* Было 1.1 */
-    box-shadow: 
-        0 0 80px var(--primary-glow),
-        0 0 150px rgba(255, 107, 53, 0.3),
-        inset 0 0 20px rgba(255, 107, 53, 0.1); /* Добавил внутреннее свечение */
-    border-width: 5px; /* Увеличиваю границу при наведении */
-}
-
-.glowing-circle.active {
-    transform: scale(1.2);
-    box-shadow: 
-        0 0 100px var(--primary-glow),
-        0 0 200px rgba(255, 107, 53, 0.4);
-}
-
-.circle-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 40px; /* Было 25px */
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 12px; /* Добавил отступы между элементами */
-}
-
-.circle-content h2 {
-    color: var(--text-primary);
-    font-size: 2rem; /* Было 1.8rem */
-    margin-bottom: 5px;
-    font-family: var(--font-logo);
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.circle-content p {
-    color: var(--text-secondary);
-    font-size: 1.1rem; /* Было 0.95rem */
-    margin: 3px 0;
-    max-width: 90%;
-    line-height: 1.4;
-}
-
-/* Статус индикатор */
-.status-indicator {
-    width: 20px; /* Было 15px */
-    height: 20px; /* Было 15px */
-    background-color: var(--primary);
-    border-radius: 50%;
-    margin: 0 auto 20px; /* Увеличил отступ */
-    box-shadow: 0 0 15px var(--primary); /* Было 10px */
-    animation: statusPulse 1.5s infinite;
-}
-
-@keyframes statusPulse {
-    0%, 100% { 
-        transform: scale(1);
-        box-shadow: 0 0 15px var(--primary);
-    }
-    50% { 
-        transform: scale(1.2);
-        box-shadow: 0 0 25px var(--primary);
-    }
-}
+        .glowing-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 50px var(--primary-glow), 0 0 100px rgba(255, 107, 53, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin: 30px 0;
+        }
         
-        /* Полноэкранный опросник */
+        .glowing-circle::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            animation: pulse 2s infinite alternate ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        .glowing-circle:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 80px var(--primary-glow), 0 0 150px rgba(255, 107, 53, 0.3), inset 0 0 20px rgba(255, 107, 53, 0.1);
+            border-width: 5px;
+        }
+        
+        .circle-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .circle-content h2 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-family: var(--font-logo);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .circle-content p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 3px 0;
+            max-width: 90%;
+            line-height: 1.4;
+        }
+        
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 15px var(--primary);
+            animation: statusPulse 1.5s infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--primary); }
+            50% { transform: scale(1.2); box-shadow: 0 0 25px var(--primary); }
+        }
+        
+        /* Опросник */
         .fullscreen-quiz {
             position: fixed;
             top: 0;
@@ -260,12 +262,6 @@
         .fullscreen-quiz.active {
             display: block;
             opacity: 1;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
         
         .quiz-container {
@@ -373,12 +369,10 @@
             margin-top: 20px;
         }
         
-        /* Результаты теста */
+        /* Результаты */
         .results-screen {
-            display: none;
             text-align: center;
             padding: 30px;
-            animation: fadeIn 0.5s ease;
         }
         
         .mood-emoji {
@@ -430,7 +424,7 @@
             color: var(--primary);
         }
         
-        /* Зона виджетов */
+        /* Виджеты */
         .widgets-area {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -450,9 +444,7 @@
             border: 1px solid var(--theme-border);
             border-radius: 12px;
             padding: 25px;
-            position: relative;
             transition: all 0.3s ease;
-            cursor: move;
         }
         
         .widget:hover {
@@ -479,7 +471,32 @@
             font-weight: 700;
         }
         
-        /* Виджет мирового времени */
+        .widget-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .widget-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .widget-btn:hover {
+            border-color: rgba(255, 107, 53, 0.5);
+            color: #ff6b35;
+        }
+        
+        /* Время */
         .world-time {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -506,7 +523,32 @@
             font-family: 'Courier New', monospace;
         }
         
-        /* Панель управления виджетами */
+        /* Кнопка управления виджетами */
+        .add-widget-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 35px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .add-widget-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        /* Менеджер виджетов */
         .widget-manager {
             position: fixed;
             top: 50%;
@@ -531,18 +573,6 @@
             display: block;
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
-            animation: modalAppear 0.3s ease;
-        }
-        
-        @keyframes modalAppear {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
         }
         
         .manager-header {
@@ -577,44 +607,7 @@
             transform: translateY(-3px);
         }
         
-        /* Панель управления темой */
-        .theme-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-        
-        .theme-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--theme-border);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .theme-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .theme-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        /* История GLOX */
+        /* История и футер */
         .glox-history {
             max-width: 800px;
             margin: 50px auto;
@@ -638,36 +631,6 @@
             font-size: 1.1rem;
         }
         
-        .history-content p {
-            margin-bottom: 20px;
-        }
-        
-        /* Кнопка добавления виджетов */
-        .add-widget-btn {
-            display: block;
-            margin: 30px auto;
-            padding: 15px 35px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-        }
-        
-        .add-widget-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
-        }
-        
-        /* Футер */
         .footer {
             text-align: center;
             margin-top: 50px;
@@ -677,58 +640,32 @@
             font-size: 0.9rem;
         }
         
-        /* Адаптивность */
         @media (max-width: 768px) {
-            .widgets-area {
-                grid-template-columns: 1fr;
-                padding: 15px;
-            }
-            
-            .world-time {
-                grid-template-columns: 1fr;
-            }
-            
-            .quiz-container {
-                padding: 20px;
-            }
-            
-            .quiz-navigation {
-                flex-direction: column;
-            }
-            
-            .quiz-btn {
-                width: 100%;
-            }
-            
-            .logo-container {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .logo-text {
-                font-size: 2.2rem;
-            }
-            
-            .glox-history {
-                padding: 20px;
-            }
+            .widgets-area { grid-template-columns: 1fr; padding: 15px; }
+            .world-time { grid-template-columns: 1fr; }
+            .quiz-container { padding: 20px; }
+            .quiz-navigation { flex-direction: column; }
+            .quiz-btn { width: 100%; }
+            .logo-container { flex-direction: column; gap: 10px; }
+            .logo-text { font-size: 2.2rem; }
+            .glox-history { padding: 20px; }
         }
     </style>
 </head>
 <body>
     <!-- Управление темой -->
     <div class="theme-controls">
-        <button class="theme-btn active" id="darkThemeBtn" title="Тёмная тема">
+        <button class="theme-btn active" id="darkThemeBtn">
             <i class="fas fa-moon"></i>
         </button>
-        <button class="theme-btn" id="lightThemeBtn" title="Светлая тема">
+        <button class="theme-btn" id="lightThemeBtn">
             <i class="fas fa-sun"></i>
         </button>
     </div>
     
-    <!-- Логотип и заголовок -->
+    <!-- Логотип -->
     <div class="logo-container">
-        <img src="logo.png" class="logo-icon" alt="GLOX">
+        <div class="logo-icon">G</div>
         <h1 class="logo-text">GLOX</h1>
     </div>
     
@@ -741,14 +678,14 @@
     <main class="main-screen">
         <!-- Анимированный круг -->
         <div class="glowing-circle" id="mainCircle">
-            <div class="circle-content" id="defaultCircle">
-    <div class="status-indicator"></div>
-    <h2>ТЕСТ САМОЧУВСТВИЯ</h2>
-    <p>Нажмите для начала</p>
-</div>
+            <div class="circle-content">
+                <div class="status-indicator"></div>
+                <h2>ТЕСТ САМОЧУВСТВИЯ</h2>
+                <p>Нажмите для начала</p>
+            </div>
         </div>
         
-        <!-- Круг с результатами (скрыт изначально) -->
+        <!-- Круг с результатами -->
         <div class="glowing-circle hidden" id="resultCircle">
             <div class="circle-content">
                 <div id="resultEmoji" class="mood-emoji"></div>
@@ -759,7 +696,7 @@
         </div>
     </main>
     
-    <!-- Полноэкранный опросник -->
+    <!-- Опросник -->
     <div class="fullscreen-quiz" id="fullscreenQuiz">
         <div class="quiz-container">
             <div class="quiz-header">
@@ -783,8 +720,8 @@
                 </div>
             </div>
             
-            <!-- Экран результатов -->
-            <div class="results-screen" id="resultsScreen">
+            <!-- Результаты -->
+            <div class="results-screen hidden" id="resultsScreen">
                 <h2 class="mood-title">ВАШ РЕЗУЛЬТАТ</h2>
                 <div id="moodEmoji" class="mood-emoji"></div>
                 <div id="finalScore" class="mood-score"></div>
@@ -806,48 +743,46 @@
         <i class="fas fa-layer-group"></i> УПРАВЛЕНИЕ ВИДЖЕТАМИ
     </button>
     
-    <!-- Зона виджетов -->
+    <!-- Виджеты -->
     <div class="widgets-area" id="widgetsArea">
-        <!-- Виджет задач -->
+        <!-- Задачи -->
         <div class="widget" id="tasksWidget">
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-tasks"></i> ЗАДАЧИ</h3>
                 <div class="widget-controls">
-                    <button class="add-task-btn"><i class="fas fa-plus"></i></button>
-                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                    <button class="widget-btn add-task-btn"><i class="fas fa-plus"></i></button>
+                    <button class="widget-btn close-btn"><i class="fas fa-times"></i></button>
                 </div>
             </div>
             <div class="widget-content" id="tasksContent"></div>
         </div>
         
-        <!-- Виджет мирового времени -->
+        <!-- Мировое время -->
         <div class="widget" id="worldTimeWidget">
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-globe"></i> МИРОВОЕ ВРЕМЯ</h3>
                 <div class="widget-controls">
-                    <button class="refresh-time-btn"><i class="fas fa-sync-alt"></i></button>
-                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                    <button class="widget-btn refresh-time-btn"><i class="fas fa-sync-alt"></i></button>
+                    <button class="widget-btn close-btn"><i class="fas fa-times"></i></button>
                 </div>
             </div>
-            <div class="world-time" id="worldTimeContent">
-                <!-- Время будет обновляться через JS -->
-            </div>
+            <div class="world-time" id="worldTimeContent"></div>
         </div>
         
-        <!-- Виджет рекомендаций -->
+        <!-- Советы -->
         <div class="widget" id="recWidget">
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-lightbulb"></i> СОВЕТЫ GLOX</h3>
                 <div class="widget-controls">
-                    <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
-                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                    <button class="widget-btn refresh-btn"><i class="fas fa-sync-alt"></i></button>
+                    <button class="widget-btn close-btn"><i class="fas fa-times"></i></button>
                 </div>
             </div>
             <div class="widget-content" id="recContent"></div>
         </div>
     </div>
     
-    <!-- Панель управления виджетами -->
+    <!-- Менеджер виджетов -->
     <div class="widget-manager" id="widgetManager">
         <div class="manager-header">
             <h2 style="color: var(--primary); font-family: var(--font-logo);">
@@ -862,12 +797,10 @@
             Выберите виджеты для отображения на главном экране:
         </p>
         
-        <div class="available-widgets" id="availableWidgets">
-            <!-- Виджеты будут добавлены через JS -->
-        </div>
+        <div class="available-widgets" id="availableWidgets"></div>
     </div>
     
-    <!-- История GLOX -->
+    <!-- История -->
     <div class="glox-history">
         <h2 class="history-title">ПУТЬ GLOX</h2>
         <div class="history-content">
@@ -889,26 +822,21 @@
             availableWidgets: [
                 { id: 'tasks', name: 'Задачи', icon: 'fas fa-tasks', description: 'Управление задачами' },
                 { id: 'worldTime', name: 'Мировое время', icon: 'fas fa-globe', description: 'Время в разных городах' },
-                { id: 'recommendations', name: 'Советы GLOX', icon: 'fas fa-lightbulb', description: 'Персонализированные рекомендации' },
-                { id: 'notes', name: 'Заметки', icon: 'fas fa-sticky-note', description: 'Быстрые заметки' },
-                { id: 'calendar', name: 'Календарь', icon: 'fas fa-calendar-alt', description: 'Расписание и события' },
-                { id: 'weather', name: 'Погода', icon: 'fas fa-cloud-sun', description: 'Прогноз погоды' }
+                { id: 'recommendations', name: 'Советы GLOX', icon: 'fas fa-lightbulb', description: 'Персонализированные рекомендации' }
             ],
             tasks: [
-                { id: 1, text: 'Пройти тест самочувствия в GLOX', completed: false, priority: 'urgent' },
-                { id: 2, text: 'Настроить виджеты под свои нужды', completed: false, priority: 'medium' },
-                { id: 3, text: 'Попробовать светлую тему', completed: false, priority: 'low' },
-                { id: 4, text: 'Изучить историю GLOX', completed: false, priority: 'low' }
+                { id: 1, text: 'Пройти тест самочувствия в GLOX', completed: false },
+                { id: 2, text: 'Настроить виджеты под свои нужды', completed: false },
+                { id: 3, text: 'Попробовать светлую тему', completed: false }
             ],
             recommendations: [
                 { title: 'Начните день с теста самочувствия', description: 'Получите персонализированные рекомендации', icon: 'fas fa-heartbeat' },
                 { title: 'Используйте тёмную тему вечером', description: 'Для снижения нагрузки на глаза', icon: 'fas fa-moon' },
-                { title: 'Следите за мировым временем', description: 'Планируйте международные встречи', icon: 'fas fa-clock' },
                 { title: 'Философия GLOX', description: 'Помните: всё что может произойти — произойдет', icon: 'fas fa-brain' }
             ]
         };
         
-        // Данные теста самочувствия
+        // Тест самочувствия
         const wellBeingQuiz = {
             questions: [
                 {
@@ -943,73 +871,43 @@
                         { text: "Устал, есть недомогания", value: 2, emoji: "🤒" },
                         { text: "Очень плохо, что-то болит", value: 1, emoji: "🤕" }
                     ]
-                },
-                {
-                    id: 4,
-                    question: "Насколько вы продуктивны сегодня?",
-                    options: [
-                        { text: "Максимально продуктивен", value: 5, emoji: "🚀" },
-                        { text: "Выше среднего", value: 4, emoji: "📈" },
-                        { text: "Средняя продуктивность", value: 3, emoji: "📊" },
-                        { text: "Ниже обычного", value: 2, emoji: "📉" },
-                        { text: "Совсем не продуктивен", value: 1, emoji: "😴" }
-                    ]
-                },
-                {
-                    id: 5,
-                    question: "Какой у вас уровень стресса?",
-                    options: [
-                        { text: "Совсем нет стресса", value: 5, emoji: "😌" },
-                        { text: "Минимальный стресс", value: 4, emoji: "🙂" },
-                        { text: "Умеренный стресс", value: 3, emoji: "😐" },
-                        { text: "Высокий уровень стресса", value: 2, emoji: "😰" },
-                        { text: "Очень высокий стресс", value: 1, emoji: "😫" }
-                    ]
                 }
             ],
             recommendations: {
-                20: {
+                12: {
                     title: "ИДЕАЛЬНО!",
                     emoji: "🌟",
-                    message: "Вы в отличной форме!",
                     tips: [
                         "Используйте свою энергию для сложных задач",
                         "Поделитесь хорошим настроением с другими",
-                        "Запланируйте что-то интересное на вечер",
-                        "Сделайте перерыв и насладитесь моментом"
+                        "Запланируйте что-то интересное на вечер"
                     ]
                 },
-                15: {
+                9: {
                     title: "ХОРОШО",
                     emoji: "😊",
-                    message: "Стабильное состояние",
                     tips: [
                         "Составьте план на день",
                         "Выполните важные задачи в первую очередь",
-                        "Сделайте небольшую прогулку",
-                        "Выпейте достаточно воды"
+                        "Сделайте небольшую прогулку"
                     ]
                 },
-                10: {
+                6: {
                     title: "НОРМАЛЬНО",
                     emoji: "🙂",
-                    message: "Есть куда расти",
                     tips: [
                         "Начните с лёгких задач",
                         "Сделайте короткий перерыв",
-                        "Послушайте любимую музыку",
-                        "Не беритесь за слишком много"
+                        "Послушайте любимую музыку"
                     ]
                 },
-                5: {
+                3: {
                     title: "ТРЕВОЖНО",
                     emoji: "😔",
-                    message: "Позаботьтесь о себе",
                     tips: [
                         "Отдохните 15-20 минут",
                         "Выпейте травяной чай",
-                        "Сделайте дыхательные упражнения",
-                        "Перенесите сложные задачи на завтра"
+                        "Сделайте дыхательные упражнения"
                     ]
                 }
             }
@@ -1018,7 +916,6 @@
         // Переменные состояния
         let currentQuestion = 0;
         let userAnswers = [];
-        let quizActive = false;
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
@@ -1033,15 +930,16 @@
             
             // Обновляем время каждую минуту
             setInterval(updateWorldTime, 60000);
+            
+            console.log('GLOX успешно загружен!');
         });
         
-        // Переключение темы
+        // Тема
         function initThemeSwitcher() {
             const darkBtn = document.getElementById('darkThemeBtn');
             const lightBtn = document.getElementById('lightThemeBtn');
             const body = document.body;
             
-            // Проверяем сохранённую тему
             const savedTheme = localStorage.getItem('gloxTheme') || 'dark';
             if (savedTheme === 'light') {
                 body.classList.add('light-theme');
@@ -1069,12 +967,10 @@
             const mainCircle = document.getElementById('mainCircle');
             const resultCircle = document.getElementById('resultCircle');
             
-            // Клик на основной круг - запуск теста
             mainCircle.addEventListener('click', function() {
                 startQuiz();
             });
             
-            // Клик на круг с результатами - сброс
             resultCircle.addEventListener('click', function() {
                 resetQuiz();
             });
@@ -1082,11 +978,9 @@
         
         // Запуск теста
         function startQuiz() {
-            quizActive = true;
             currentQuestion = 0;
             userAnswers = [];
             
-            // Анимация скрытия круга
             const mainCircle = document.getElementById('mainCircle');
             mainCircle.classList.add('hidden');
             
@@ -1094,7 +988,7 @@
                 document.getElementById('fullscreenQuiz').classList.add('active');
                 document.body.style.overflow = 'hidden';
                 loadQuestion();
-            }, 500);
+            }, 300);
         }
         
         // Загрузка вопроса
@@ -1113,7 +1007,6 @@
                     <div>${option.text}</div>
                 `;
                 optionEl.dataset.index = index;
-                optionEl.dataset.value = option.value;
                 
                 if (userAnswers[currentQuestion] === index) {
                     optionEl.classList.add('selected');
@@ -1130,13 +1023,12 @@
                 optionsContainer.appendChild(optionEl);
             });
             
-            // Обновление навигации
             document.getElementById('prevBtn').disabled = currentQuestion === 0;
             document.getElementById('nextBtn').textContent = currentQuestion === wellBeingQuiz.questions.length - 1 ? 'Завершить' : 'Далее';
             document.getElementById('progressText').textContent = `Вопрос ${currentQuestion + 1} из ${wellBeingQuiz.questions.length}`;
         }
         
-        // Инициализация квиза
+        // Квиз
         function initQuiz() {
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -1171,9 +1063,8 @@
             });
         }
         
-        // Показ результатов
+        // Результаты
         function showResults() {
-            // Подсчёт баллов
             let totalScore = 0;
             userAnswers.forEach((answerIndex, questionIndex) => {
                 if (answerIndex !== undefined) {
@@ -1182,29 +1073,26 @@
                 }
             });
             
-            // Определение результата
             let result;
-            if (totalScore >= 20) result = wellBeingQuiz.recommendations[20];
-            else if (totalScore >= 15) result = wellBeingQuiz.recommendations[15];
-            else if (totalScore >= 10) result = wellBeingQuiz.recommendations[10];
-            else result = wellBeingQuiz.recommendations[5];
+            if (totalScore >= 12) result = wellBeingQuiz.recommendations[12];
+            else if (totalScore >= 9) result = wellBeingQuiz.recommendations[9];
+            else if (totalScore >= 6) result = wellBeingQuiz.recommendations[6];
+            else result = wellBeingQuiz.recommendations[3];
             
-            // Отображение результатов
-            document.getElementById('quizContent').style.display = 'none';
-            document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('quizContent').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
             
             document.getElementById('moodEmoji').textContent = result.emoji;
-            document.getElementById('finalScore').textContent = `${totalScore}/25`;
+            document.getElementById('finalScore').textContent = `${totalScore}/15`;
             
-            const recommendationsList = document.getElementById('recommendationsList');
-            recommendationsList.innerHTML = '';
+            const list = document.getElementById('recommendationsList');
+            list.innerHTML = '';
             result.tips.forEach(tip => {
                 const li = document.createElement('li');
                 li.innerHTML = `<i class="fas fa-check-circle"></i> ${tip}`;
-                recommendationsList.appendChild(li);
+                list.appendChild(li);
             });
             
-            // Сохраняем результат для круга
             window.lastQuizResult = {
                 score: totalScore,
                 title: result.title,
@@ -1212,7 +1100,7 @@
             };
         }
         
-        // Показ круга с результатами
+        // Круг с результатами
         function showResultCircle() {
             if (!window.lastQuizResult) return;
             
@@ -1221,34 +1109,24 @@
             
             document.getElementById('resultEmoji').textContent = window.lastQuizResult.emoji;
             document.getElementById('resultTitle').textContent = window.lastQuizResult.title;
-            document.getElementById('resultScore').textContent = `${window.lastQuizResult.score}/25`;
+            document.getElementById('resultScore').textContent = `${window.lastQuizResult.score}/15`;
             
             mainCircle.classList.add('hidden');
-            setTimeout(() => {
-                resultCircle.classList.remove('hidden');
-            }, 300);
+            resultCircle.classList.remove('hidden');
         }
         
-        // Сброс теста
+        // Сброс
         function resetQuiz() {
             const mainCircle = document.getElementById('mainCircle');
             const resultCircle = document.getElementById('resultCircle');
             const quizScreen = document.getElementById('fullscreenQuiz');
             
             resultCircle.classList.add('hidden');
-            setTimeout(() => {
-                mainCircle.classList.remove('hidden');
-                mainCircle.classList.add('active');
-                
-                setTimeout(() => {
-                    mainCircle.classList.remove('active');
-                }, 1000);
-            }, 300);
+            mainCircle.classList.remove('hidden');
             
-            // Сброс квиза
             quizScreen.classList.remove('active');
-            document.getElementById('quizContent').style.display = 'block';
-            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('quizContent').classList.remove('hidden');
+            document.getElementById('resultsScreen').classList.add('hidden');
             document.body.style.overflow = 'auto';
             
             delete window.lastQuizResult;
@@ -1263,10 +1141,6 @@
                 appData.tasks.forEach(task => {
                     const taskItem = document.createElement('div');
                     taskItem.style.cssText = 'display: flex; align-items: center; gap: 15px; padding: 12px; margin-bottom: 10px; background: rgba(255, 107, 53, 0.05); border-radius: 8px;';
-                    
-                    if (task.priority === 'urgent') taskItem.style.borderLeft = '4px solid #ff4757';
-                    else if (task.priority === 'medium') taskItem.style.borderLeft = '4px solid #ffa502';
-                    else taskItem.style.borderLeft = '4px solid #2ed573';
                     
                     taskItem.innerHTML = `
                         <input type="checkbox" ${task.completed ? 'checked' : ''} 
@@ -1286,21 +1160,18 @@
                 });
             }
             
-            // Кнопка добавления задачи
-            document.querySelector('.add-task-btn').addEventListener('click', function() {
+            document.querySelector('#tasksWidget .add-task-btn').addEventListener('click', function() {
                 const taskText = prompt('Введите новую задачу:');
                 if (taskText) {
                     appData.tasks.push({
                         id: Date.now(),
                         text: taskText,
-                        completed: false,
-                        priority: 'medium'
+                        completed: false
                     });
                     renderTasks();
                 }
             });
             
-            // Кнопка закрытия виджета
             document.querySelector('#tasksWidget .close-btn').addEventListener('click', function() {
                 document.getElementById('tasksWidget').style.display = 'none';
                 setTimeout(() => {
@@ -1311,14 +1182,12 @@
             renderTasks();
         }
         
-        // Виджет мирового времени
+        // Виджет времени
         function initWorldTimeWidget() {
             updateWorldTime();
             
-            // Кнопка обновления времени
-            document.querySelector('.refresh-time-btn').addEventListener('click', updateWorldTime);
+            document.querySelector('#worldTimeWidget .refresh-time-btn').addEventListener('click', updateWorldTime);
             
-            // Кнопка закрытия виджета
             document.querySelector('#worldTimeWidget .close-btn').addEventListener('click', function() {
                 document.getElementById('worldTimeWidget').style.display = 'none';
                 setTimeout(() => {
@@ -1332,9 +1201,7 @@
                 { city: 'Москва', offset: 3 },
                 { city: 'Лондон', offset: 0 },
                 { city: 'Нью-Йорк', offset: -5 },
-                { city: 'Токио', offset: 9 },
-                { city: 'Сидней', offset: 11 },
-                { city: 'Дубай', offset: 4 }
+                { city: 'Токио', offset: 9 }
             ];
             
             const now = new Date();
@@ -1371,7 +1238,7 @@
                 recContent.innerHTML = '';
                 appData.recommendations.forEach(rec => {
                     const recCard = document.createElement('div');
-                    recCard.style.cssText = 'background: rgba(255, 107, 53, 0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--theme-border); cursor: pointer; transition: all 0.3s;';
+                    recCard.style.cssText = 'background: rgba(255, 107, 53, 0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--theme-border); cursor: pointer;';
                     recCard.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                             <div style="font-size: 1.5rem; color: var(--primary);">
@@ -1383,19 +1250,15 @@
                     `;
                     
                     recCard.addEventListener('click', function() {
-                        alert(`Рекомендация: ${rec.title}\n\n${rec.description}`);
+                        alert(`${rec.title}\n\n${rec.description}`);
                     });
                     
                     recContent.appendChild(recCard);
                 });
             }
             
-            // Кнопка обновления
-            document.querySelector('#recWidget .refresh-btn').addEventListener('click', function() {
-                renderRecommendations();
-            });
+            document.querySelector('#recWidget .refresh-btn').addEventListener('click', renderRecommendations);
             
-            // Кнопка закрытия
             document.querySelector('#recWidget .close-btn').addEventListener('click', function() {
                 document.getElementById('recWidget').style.display = 'none';
                 setTimeout(() => {
@@ -1406,27 +1269,24 @@
             renderRecommendations();
         }
         
-        // Управление виджетами
+        // Менеджер виджетов
         function initWidgetManager() {
             const managerBtn = document.getElementById('addWidgetBtn');
             const manager = document.getElementById('widgetManager');
             const closeBtn = document.getElementById('closeManagerBtn');
             const availableWidgets = document.getElementById('availableWidgets');
             
-            // Открытие менеджера
             managerBtn.addEventListener('click', function() {
                 manager.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 renderAvailableWidgets();
             });
             
-            // Закрытие менеджера
             closeBtn.addEventListener('click', function() {
                 manager.classList.remove('active');
-                document.body.style.overflow = 'auto');
+                document.body.style.overflow = 'auto';
             });
             
-            // Закрытие по клику вне менеджера
             manager.addEventListener('click', function(e) {
                 if (e.target === manager) {
                     manager.classList.remove('active');
@@ -1434,7 +1294,6 @@
                 }
             });
             
-            // Рендер доступных виджетов
             function renderAvailableWidgets() {
                 availableWidgets.innerHTML = '';
                 appData.availableWidgets.forEach(widget => {
@@ -1468,18 +1327,14 @@
             function toggleWidget(widgetId) {
                 const index = appData.activeWidgets.indexOf(widgetId);
                 if (index > -1) {
-                    // Удаляем виджет
                     appData.activeWidgets.splice(index, 1);
                     document.getElementById(widgetId + 'Widget').style.display = 'none';
                 } else {
-                    // Добавляем виджет
                     appData.activeWidgets.push(widgetId);
                     document.getElementById(widgetId + 'Widget').style.display = 'block';
                 }
             }
         }
-        
-        console.log('GLOX успешно загружен!');
     </script>
 </body>
 </html>
