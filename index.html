@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOX</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logomini.png">
+    <link rel="shortcut icon" type="image/x-icon" href="logomini.png">
+    <link rel="apple-touch-icon" href="logomini.png">
+    
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="GLOX • Автономная среда мышления">
+    <meta property="og:description" content="Все, что может произойти — обязательно произойдет">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:type" content="website">
+    
+    <!-- Дополнительные мета-теги -->
+    <meta name="description" content="GLOX - автономная среда мышления с персонализированными тестами и виджетами">
+    <meta name="keywords" content="GLOX, самочувствие, тест, виджеты, время, задачи, философия">
+    <meta name="author" content="GLOX">
+    <meta name="theme-color" content="#FF6B35">
+    
+    <!-- Кэширование -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Шрифты -->
@@ -708,6 +731,45 @@
                 padding: 20px;
             }
         }
+        
+        /* Утилитные классы */
+        .hidden {
+            display: none !important;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Анимация загрузки */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
     </style>
 </head>
 <body>
@@ -715,15 +777,17 @@
     <div class="theme-controls">
         <button class="theme-btn active" id="darkThemeBtn" title="Тёмная тема">
             <i class="fas fa-moon"></i>
+            <span class="sr-only">Тёмная тема</span>
         </button>
         <button class="theme-btn" id="lightThemeBtn" title="Светлая тема">
             <i class="fas fa-sun"></i>
+            <span class="sr-only">Светлая тема</span>
         </button>
     </div>
     
     <!-- Логотип и заголовок -->
     <div class="logo-container">
-        <img src="logo.png" class="logo-icon" alt="GLOX">
+        <img src="logo.png" class="logo-icon" alt="GLOX Логотип" loading="lazy">
         <h1 class="logo-text">GLOX</h1>
     </div>
     
@@ -735,18 +799,18 @@
     <!-- Главный экран -->
     <main class="main-screen">
         <!-- Анимированный круг -->
-        <div class="glowing-circle" id="mainCircle">
+        <div class="glowing-circle" id="mainCircle" role="button" aria-label="Начать тест самочувствия">
             <div class="circle-content" id="defaultCircle">
-    <div class="status-indicator"></div>
-    <h2>ТЕСТ САМОЧУВСТВИЯ</h2>
-    <p>Нажмите для начала</p>
-</div>
+                <div class="status-indicator"></div>
+                <h2>ТЕСТ САМОЧУВСТВИЯ</h2>
+                <p>Нажмите для начала</p>
+            </div>
         </div>
         
         <!-- Круг с результатами (скрыт изначально) -->
-        <div class="glowing-circle hidden" id="resultCircle">
+        <div class="glowing-circle hidden" id="resultCircle" role="button" aria-label="Показать результаты теста">
             <div class="circle-content">
-                <div id="resultEmoji" class="mood-emoji"></div>
+                <div id="resultEmoji" class="mood-emoji" aria-hidden="true"></div>
                 <h2 id="resultTitle"></h2>
                 <p id="resultScore" class="mood-score"></p>
                 <p>Нажмите для нового теста</p>
@@ -755,7 +819,7 @@
     </main>
     
     <!-- Полноэкранный опросник -->
-    <div class="fullscreen-quiz" id="fullscreenQuiz">
+    <div class="fullscreen-quiz" id="fullscreenQuiz" aria-hidden="true">
         <div class="quiz-container">
             <div class="quiz-header">
                 <h2 class="quiz-title">ТЕСТ САМОЧУВСТВИЯ</h2>
@@ -781,7 +845,7 @@
             <!-- Экран результатов -->
             <div class="results-screen" id="resultsScreen">
                 <h2 class="mood-title">ВАШ РЕЗУЛЬТАТ</h2>
-                <div id="moodEmoji" class="mood-emoji"></div>
+                <div id="moodEmoji" class="mood-emoji" aria-hidden="true"></div>
                 <div id="finalScore" class="mood-score"></div>
                 
                 <div class="recommendations">
@@ -808,8 +872,8 @@
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-tasks"></i> ЗАДАЧИ</h3>
                 <div class="widget-controls">
-                    <button class="add-task-btn"><i class="fas fa-plus"></i></button>
-                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                    <button class="add-task-btn" aria-label="Добавить задачу"><i class="fas fa-plus"></i></button>
+                    <button class="close-btn" aria-label="Скрыть виджет"><i class="fas fa-times"></i></button>
                 </div>
             </div>
             <div class="widget-content" id="tasksContent"></div>
@@ -820,7 +884,7 @@
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-globe"></i> МИРОВОЕ ВРЕМЯ</h3>
                 <div class="widget-controls">
-                    <button class="refresh-time-btn"><i class="fas fa-sync-alt"></i></button>
+                    <button class="refresh-time-btn" aria-label="Обновить время"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
             <div class="world-time" id="worldTimeContent">
@@ -833,7 +897,7 @@
             <div class="widget-header">
                 <h3 class="widget-title"><i class="fas fa-lightbulb"></i> СОВЕТЫ GLOX</h3>
                 <div class="widget-controls">
-                    <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
+                    <button class="refresh-btn" aria-label="Обновить рекомендации"><i class="fas fa-sync-alt"></i></button>
                 </div>
             </div>
             <div class="widget-content" id="recContent"></div>
@@ -841,12 +905,12 @@
     </div>
     
     <!-- Панель управления виджетами -->
-    <div class="widget-manager" id="widgetManager">
+    <div class="widget-manager" id="widgetManager" aria-hidden="true">
         <div class="manager-header">
             <h2 style="color: var(--primary); font-family: var(--font-logo);">
                 <i class="fas fa-layer-group"></i> УПРАВЛЕНИЕ ВИДЖЕТАМИ
             </h2>
-            <button class="quiz-btn" id="closeManagerBtn" style="padding: 8px 20px;">
+            <button class="quiz-btn" id="closeManagerBtn" style="padding: 8px 20px;" aria-label="Закрыть панель">
                 <i class="fas fa-times"></i>
             </button>
         </div>
@@ -1015,6 +1079,8 @@
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('%c🔮 GLOX загружается...', 'color: #FF6B35; font-size: 16px; font-weight: bold;');
+            
             initThemeSwitcher();
             initMainCircle();
             initQuiz();
@@ -1026,6 +1092,10 @@
             
             // Обновляем время каждую минуту
             setInterval(updateWorldTime, 60000);
+            
+            // Проверка версии
+            console.log('%c✅ GLOX v2.0 успешно загружен!', 'color: #06D6A0; font-size: 14px;');
+            console.log('%c🎯 «Все, что может произойти — обязательно произойдет»', 'color: #FFD166; font-style: italic;');
         });
         
         // Переключение темы
@@ -1047,6 +1117,7 @@
                 darkBtn.classList.add('active');
                 lightBtn.classList.remove('active');
                 localStorage.setItem('gloxTheme', 'dark');
+                console.log('🎨 Тема изменена: Тёмная');
             });
             
             lightBtn.addEventListener('click', function() {
@@ -1054,6 +1125,7 @@
                 lightBtn.classList.add('active');
                 darkBtn.classList.remove('active');
                 localStorage.setItem('gloxTheme', 'light');
+                console.log('🎨 Тема изменена: Светлая');
             });
         }
         
@@ -1071,6 +1143,14 @@
             resultCircle.addEventListener('click', function() {
                 resetQuiz();
             });
+            
+            // Анимация пульсации
+            setInterval(() => {
+                if (!quizActive && Math.random() > 0.7) {
+                    mainCircle.classList.add('active');
+                    setTimeout(() => mainCircle.classList.remove('active'), 1000);
+                }
+            }, 3000);
         }
         
         // Запуск теста
@@ -1079,12 +1159,15 @@
             currentQuestion = 0;
             userAnswers = [];
             
+            console.log('🧪 Запуск теста самочувствия...');
+            
             // Анимация скрытия круга
             const mainCircle = document.getElementById('mainCircle');
             mainCircle.classList.add('hidden');
             
             setTimeout(() => {
                 document.getElementById('fullscreenQuiz').classList.add('active');
+                document.getElementById('fullscreenQuiz').setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 loadQuestion();
             }, 500);
@@ -1107,6 +1190,8 @@
                 `;
                 optionEl.dataset.index = index;
                 optionEl.dataset.value = option.value;
+                optionEl.setAttribute('role', 'button');
+                optionEl.setAttribute('tabindex', '0');
                 
                 if (userAnswers[currentQuestion] === index) {
                     optionEl.classList.add('selected');
@@ -1118,6 +1203,17 @@
                     });
                     this.classList.add('selected');
                     userAnswers[currentQuestion] = parseInt(this.dataset.index);
+                    
+                    // Авто-переход на последнем вопросе
+                    if (currentQuestion === wellBeingQuiz.questions.length - 1) {
+                        setTimeout(() => document.getElementById('nextBtn').click(), 300);
+                    }
+                });
+                
+                optionEl.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        this.click();
+                    }
                 });
                 
                 optionsContainer.appendChild(optionEl);
@@ -1127,6 +1223,12 @@
             document.getElementById('prevBtn').disabled = currentQuestion === 0;
             document.getElementById('nextBtn').textContent = currentQuestion === wellBeingQuiz.questions.length - 1 ? 'Завершить' : 'Далее';
             document.getElementById('progressText').textContent = `Вопрос ${currentQuestion + 1} из ${wellBeingQuiz.questions.length}`;
+            
+            // Фокус на первом варианте
+            setTimeout(() => {
+                const firstOption = optionsContainer.querySelector('.quiz-option');
+                if (firstOption) firstOption.focus();
+            }, 100);
         }
         
         // Инициализация квиза
@@ -1159,8 +1261,19 @@
             
             closeBtn.addEventListener('click', function() {
                 quizScreen.classList.remove('active');
+                quizScreen.setAttribute('aria-hidden', 'true');
                 document.body.style.overflow = 'auto';
                 showResultCircle();
+            });
+            
+            // Закрытие по ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && quizScreen.classList.contains('active')) {
+                    quizScreen.classList.remove('active');
+                    quizScreen.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = 'auto';
+                    if (quizActive) showResultCircle();
+                }
             });
         }
         
@@ -1174,6 +1287,8 @@
                     totalScore += question.options[answerIndex].value;
                 }
             });
+            
+            console.log(`📊 Результат теста: ${totalScore}/25`);
             
             // Определение результата
             let result;
@@ -1201,8 +1316,18 @@
             window.lastQuizResult = {
                 score: totalScore,
                 title: result.title,
-                emoji: result.emoji
+                emoji: result.emoji,
+                timestamp: new Date().toISOString()
             };
+            
+            // Сохраняем в localStorage
+            const history = JSON.parse(localStorage.getItem('gloxTestHistory') || '[]');
+            history.push({
+                score: totalScore,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem('gloxTestHistory', JSON.stringify(history.slice(-10))); // Храним последние 10 тестов
         }
         
         // Показ круга с результатами
@@ -1219,6 +1344,7 @@
             mainCircle.classList.add('hidden');
             setTimeout(() => {
                 resultCircle.classList.remove('hidden');
+                quizActive = false;
             }, 300);
         }
         
@@ -1240,6 +1366,7 @@
             
             // Сброс квиза
             quizScreen.classList.remove('active');
+            quizScreen.setAttribute('aria-hidden', 'true');
             document.getElementById('quizContent').style.display = 'block';
             document.getElementById('resultsScreen').style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -1263,7 +1390,8 @@
                     
                     taskItem.innerHTML = `
                         <input type="checkbox" ${task.completed ? 'checked' : ''} 
-                               style="width: 20px; height: 20px; cursor: pointer;">
+                               style="width: 20px; height: 20px; cursor: pointer;"
+                               aria-label="${task.completed ? 'Отметить как невыполненную: ' : 'Отметить как выполненную: '}${task.text}">
                         <div style="flex: 1; ${task.completed ? 'text-decoration: line-through; color: var(--text-dim);' : ''}">
                             ${task.text}
                         </div>
@@ -1273,6 +1401,7 @@
                     checkbox.addEventListener('change', function() {
                         task.completed = this.checked;
                         renderTasks();
+                        console.log(`✅ Задача "${task.text}" ${task.completed ? 'выполнена' : 'не выполнена'}`);
                     });
                     
                     tasksContent.appendChild(taskItem);
@@ -1282,20 +1411,22 @@
             // Кнопка добавления задачи
             document.querySelector('.add-task-btn').addEventListener('click', function() {
                 const taskText = prompt('Введите новую задачу:');
-                if (taskText) {
+                if (taskText && taskText.trim()) {
                     appData.tasks.push({
                         id: Date.now(),
-                        text: taskText,
+                        text: taskText.trim(),
                         completed: false,
                         priority: 'medium'
                     });
                     renderTasks();
+                    console.log(`📝 Добавлена новая задача: "${taskText}"`);
                 }
             });
             
             // Кнопка закрытия виджета
             document.querySelector('#tasksWidget .close-btn').addEventListener('click', function() {
                 document.getElementById('tasksWidget').style.display = 'none';
+                console.log('👁️ Виджет "Задачи" скрыт');
                 setTimeout(() => {
                     document.getElementById('tasksWidget').style.display = 'block';
                 }, 5000);
@@ -1312,12 +1443,16 @@
             document.querySelector('.refresh-time-btn').addEventListener('click', updateWorldTime);
             
             // Кнопка закрытия виджета
-            document.querySelector('#worldTimeWidget .close-btn').addEventListener('click', function() {
-                document.getElementById('worldTimeWidget').style.display = 'none';
-                setTimeout(() => {
-                    document.getElementById('worldTimeWidget').style.display = 'block';
-                }, 5000);
-            });
+            const closeBtn = document.querySelector('#worldTimeWidget .close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    document.getElementById('worldTimeWidget').style.display = 'none';
+                    console.log('👁️ Виджет "Мировое время" скрыт');
+                    setTimeout(() => {
+                        document.getElementById('worldTimeWidget').style.display = 'block';
+                    }, 5000);
+                });
+            }
         }
         
         function updateWorldTime() {
@@ -1376,7 +1511,14 @@
                     `;
                     
                     recCard.addEventListener('click', function() {
-                        alert(`Рекомендация: ${rec.title}\n\n${rec.description}`);
+                        console.log(`💡 Рекомендация просмотрена: ${rec.title}`);
+                        alert(`Рекомендация GLOX\n\n${rec.title}\n\n${rec.description}`);
+                    });
+                    
+                    recCard.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            this.click();
+                        }
                     });
                     
                     recContent.appendChild(recCard);
@@ -1386,15 +1528,20 @@
             // Кнопка обновления
             document.querySelector('#recWidget .refresh-btn').addEventListener('click', function() {
                 renderRecommendations();
+                console.log('🔄 Рекомендации обновлены');
             });
             
             // Кнопка закрытия
-            document.querySelector('#recWidget .close-btn').addEventListener('click', function() {
-                document.getElementById('recWidget').style.display = 'none';
-                setTimeout(() => {
-                    document.getElementById('recWidget').style.display = 'block';
-                }, 5000);
-            });
+            const closeBtn = document.querySelector('#recWidget .close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    document.getElementById('recWidget').style.display = 'none';
+                    console.log('👁️ Виджет "Советы GLOX" скрыт');
+                    setTimeout(() => {
+                        document.getElementById('recWidget').style.display = 'block';
+                    }, 5000);
+                });
+            }
             
             renderRecommendations();
         }
@@ -1409,20 +1556,34 @@
             // Открытие менеджера
             managerBtn.addEventListener('click', function() {
                 manager.classList.add('active');
+                manager.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 renderAvailableWidgets();
+                console.log('⚙️ Открыт менеджер виджетов');
             });
             
             // Закрытие менеджера
             closeBtn.addEventListener('click', function() {
                 manager.classList.remove('active');
+                manager.setAttribute('aria-hidden', 'true');
                 document.body.style.overflow = 'auto';
+                console.log('⚙️ Закрыт менеджер виджетов');
             });
             
             // Закрытие по клику вне менеджера
             manager.addEventListener('click', function(e) {
                 if (e.target === manager) {
                     manager.classList.remove('active');
+                    manager.setAttribute('aria-hidden', 'true');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Закрытие по ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && manager.classList.contains('active')) {
+                    manager.classList.remove('active');
+                    manager.setAttribute('aria-hidden', 'true');
                     document.body.style.overflow = 'auto';
                 }
             });
@@ -1464,15 +1625,45 @@
                     // Удаляем виджет
                     appData.activeWidgets.splice(index, 1);
                     document.getElementById(widgetId + 'Widget').style.display = 'none';
+                    console.log(`👁️ Виджет "${widgetId}" скрыт`);
                 } else {
                     // Добавляем виджет
                     appData.activeWidgets.push(widgetId);
                     document.getElementById(widgetId + 'Widget').style.display = 'block';
+                    console.log(`👁️ Виджет "${widgetId}" показан`);
                 }
             }
         }
         
-        console.log('GLOX успешно загружен!');
+        // Служебные функции
+        function showNotification(message, type = 'info') {
+            const colors = {
+                info: '#118AB2',
+                success: '#06D6A0',
+                warning: '#FFD166',
+                error: '#EF476F'
+            };
+            
+            console.log(`📢 ${type.toUpperCase()}: ${message}`);
+            
+            // Простая реализация уведомления
+            if (Notification.permission === 'granted') {
+                new Notification('GLOX', {
+                    body: message,
+                    icon: 'logomini.png'
+                });
+            }
+        }
+        
+        // Запрашиваем разрешение на уведомления
+        if ('Notification' in window && Notification.permission === 'default') {
+            setTimeout(() => {
+                Notification.requestPermission();
+            }, 2000);
+        }
+        
+        console.log('🔮 GLOX v2.0 успешно загружен!');
+        console.log('🎯 «Все, что может произойти — обязательно произойдет»');
     </script>
 </body>
 </html>
