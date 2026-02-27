@@ -837,85 +837,313 @@
         };
         
         // Тест самочувствия
-        const wellBeingQuiz = {
-            questions: [
-                {
-                    id: 1,
-                    question: "Как вы спали сегодня ночью?",
-                    options: [
-                        { text: "Отлично, выспался", value: 5, emoji: "😴" },
-                        { text: "Хорошо, но могло быть лучше", value: 4, emoji: "😌" },
-                        { text: "Средне, несколько раз просыпался", value: 3, emoji: "😐" },
-                        { text: "Плохо, почти не спал", value: 2, emoji: "😫" },
-                        { text: "Очень плохо, бессонница", value: 1, emoji: "💀" }
-                    ]
-                },
-                {
-                    id: 2,
-                    question: "Какое у вас настроение сейчас?",
-                    options: [
-                        { text: "Отличное, полон энергии", value: 5, emoji: "😄" },
-                        { text: "Хорошее, позитивное", value: 4, emoji: "😊" },
-                        { text: "Нейтральное, спокойное", value: 3, emoji: "🙂" },
-                        { text: "Подавленное, грустное", value: 2, emoji: "😔" },
-                        { text: "Плохое, раздраженное", value: 1, emoji: "😠" }
-                    ]
-                },
-                {
-                    id: 3,
-                    question: "Как вы себя чувствуете физически?",
-                    options: [
-                        { text: "Полон сил и энергии", value: 5, emoji: "💪" },
-                        { text: "Нормально, ничего не болит", value: 4, emoji: "👍" },
-                        { text: "Есть небольшая усталость", value: 3, emoji: "😴" },
-                        { text: "Устал, есть недомогания", value: 2, emoji: "🤒" },
-                        { text: "Очень плохо, что-то болит", value: 1, emoji: "🤕" }
-                    ]
-                }
-            ],
-            recommendations: {
-                12: {
-                    title: "ИДЕАЛЬНО!",
-                    emoji: "🌟",
-                    tips: [
-                        "Используйте свою энергию для сложных задач",
-                        "Поделитесь хорошим настроением с другими",
-                        "Запланируйте что-то интересное на вечер"
-                    ]
-                },
-                9: {
-                    title: "ХОРОШО",
-                    emoji: "😊",
-                    tips: [
-                        "Составьте план на день",
-                        "Выполните важные задачи в первую очередь",
-                        "Сделайте небольшую прогулку"
-                    ]
-                },
-                6: {
-                    title: "НОРМАЛЬНО",
-                    emoji: "🙂",
-                    tips: [
-                        "Начните с лёгких задач",
-                        "Сделайте короткий перерыв",
-                        "Послушайте любимую музыку"
-                    ]
-                },
-                3: {
-                    title: "ТРЕВОЖНО",
-                    emoji: "😔",
-                    tips: [
-                        "Отдохните 15-20 минут",
-                        "Выпейте травяной чай",
-                        "Сделайте дыхательные упражнения"
-                    ]
-                }
-            }
-        };
-        
-        // Переменные состояния
-        let currentQuestion = 0;
-        let userAnswers = [];
+        // Новая система оценки состояния (заменяет старый wellBeingQuiz)
+const wellBeingQuiz = {
+    categories: [
+        { id: 'sleep', name: 'Сон', x: 0, y: 0 },
+        { id: 'mood', name: 'Настроение', x: 0, y: 0 },
+        { id: 'physical', name: 'Физическое состояние', x: 0, y: 0 }
+    ],
+    recommendations: {
+        12: {
+            title: "ИДЕАЛЬНО!",
+            emoji: "🌟",
+            tips: [
+                "Используйте свою энергию для сложных задач",
+                "Поделитесь хорошим настроением с другими",
+                "Запланируйте что-то интересное на вечер"
+            ]
+        },
+        9: {
+            title: "ХОРОШО",
+            emoji: "😊",
+            tips: [
+                "Составьте план на день",
+                "Выполните важные задачи в первую очередь",
+                "Сделайте небольшую прогулку"
+            ]
+        },
+        6: {
+            title: "НОРМАЛЬНО",
+            emoji: "🙂",
+            tips: [
+                "Начните с лёгких задач",
+                "Сделайте короткий перерыв",
+                "Послушайте любимую музыку"
+            ]
+        },
+        3: {
+            title: "ТРЕВОЖНО",
+            emoji: "😔",
+            tips: [
+                "Отдохните 15-20 минут",
+                "Выпейте травяной чай",
+                "Сделайте дыхательные упражнения"
+            ]
+        }
+    },
+    calculateScore() {
+        const sumX = this.categories.reduce((acc, cat) => acc + cat.x, 0);
+        const sumY = this.categories.reduce((acc, cat) => acc + cat.y, 0);
+        return (sumX + sumY) / 2;
+    }
+};
+
+// Переменные состояния (оставляем для совместимости, но они не используются)
+let currentCategoryIndex = 0;
+let userAnswers = [];
+
+// Функции нового опросника
+function createCategoryGrid(category, container) {
+    const gridSize = 200;
+    const half = gridSize / 2;
+
+    const gridDiv = document.createElement('div');
+    gridDiv.className = 'category-grid';
+    gridDiv.style.cssText = `
+        position: relative;
+        width: ${gridSize}px;
+        height: ${gridSize}px;
+        background: var(--card-bg);
+        border: 2px solid var(--primary);
+        border-radius: 10px;
+        margin: 0 auto 20px;
+        cursor: crosshair;
+        box-shadow: 0 0 20px rgba(255,107,53,0.2);
+    `;
+
+    const xAxis = document.createElement('div');
+    xAxis.style.cssText = `
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: rgba(255,107,53,0.3);
+        transform: translateY(-50%);
+        pointer-events: none;
+    `;
+    const yAxis = document.createElement('div');
+    yAxis.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: rgba(255,107,53,0.3);
+        transform: translateX(-50%);
+        pointer-events: none;
+    `;
+
+    const marker = document.createElement('div');
+    marker.className = 'grid-marker';
+    marker.style.cssText = `
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: var(--primary);
+        border: 3px solid white;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 15px var(--primary);
+        transition: all 0.1s ease;
+        pointer-events: none;
+        z-index: 10;
+    `;
+
+    gridDiv.appendChild(xAxis);
+    gridDiv.appendChild(yAxis);
+    gridDiv.appendChild(marker);
+
+    function updateMarkerPosition() {
+        const left = half + (category.x / 5) * half;
+        const top = half - (category.y / 5) * half;
+        marker.style.left = `${Math.min(gridSize, Math.max(0, left))}px`;
+        marker.style.top = `${Math.min(gridSize, Math.max(0, top))}px`;
+    }
+
+    gridDiv.addEventListener('click', (e) => {
+        const rect = gridDiv.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        let newX = ((x / gridSize) * 10 - 5).toFixed(1);
+        let newY = ((1 - y / gridSize) * 10 - 5).toFixed(1);
+
+        newX = Math.min(5, Math.max(-5, parseFloat(newX)));
+        newY = Math.min(5, Math.max(-5, parseFloat(newY)));
+
+        category.x = newX;
+        category.y = newY;
+
+        updateMarkerPosition();
+        updateCategoryDisplay();
+    });
+
+    const valuesDiv = document.createElement('div');
+    valuesDiv.className = 'category-values';
+    valuesDiv.style.cssText = `
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: 1rem;
+        color: var(--text-primary);
+    `;
+
+    function updateCategoryDisplay() {
+        const xEmoji = category.x >= 0 ? '😊' : '😞';
+        const yEmoji = category.y >= 0 ? '⚡' : '😴';
+        valuesDiv.innerHTML = `
+            <span>${xEmoji} Самочувствие: ${category.x}</span>
+            <span>${yEmoji} Энергия: ${category.y}</span>
+        `;
+    }
+
+    gridDiv.appendChild(valuesDiv);
+    container.appendChild(gridDiv);
+    container.appendChild(valuesDiv);
+
+    updateMarkerPosition();
+    updateCategoryDisplay();
+}
+
+function renderQuizCategories() {
+    const quizContent = document.getElementById('quizContent');
+    quizContent.innerHTML = '';
+
+    const container = document.createElement('div');
+    container.className = 'categories-container';
+    container.style.cssText = `
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 30px;
+    `;
+
+    wellBeingQuiz.categories.forEach(category => {
+        const categoryBlock = document.createElement('div');
+        categoryBlock.className = `category-block ${category.id}`;
+        categoryBlock.style.cssText = `
+            background: rgba(255,107,53,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--theme-border);
+        `;
+
+        const title = document.createElement('h3');
+        title.style.cssText = `
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: var(--font-logo);
+        `;
+        title.textContent = category.name;
+
+        categoryBlock.appendChild(title);
+        createCategoryGrid(category, categoryBlock);
+        container.appendChild(categoryBlock);
+    });
+
+    quizContent.appendChild(container);
+    
+    document.getElementById('prevBtn').style.display = 'none';
+    document.getElementById('nextBtn').innerHTML = 'Завершить <i class="fas fa-check"></i>';
+    document.getElementById('progressText').textContent = 'Выберите состояние для каждой категории';
+}
+
+function startQuiz() {
+    wellBeingQuiz.categories.forEach(cat => { cat.x = 0; cat.y = 0; });
+
+    const mainCircle = document.getElementById('mainCircle');
+    mainCircle.classList.add('hidden');
+
+    setTimeout(() => {
+        const quizScreen = document.getElementById('fullscreenQuiz');
+        quizScreen.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        renderQuizCategories();
+    }, 300);
+}
+
+function showResults() {
+    const totalScore = wellBeingQuiz.calculateScore();
+
+    let result;
+    if (totalScore >= 12) result = wellBeingQuiz.recommendations[12];
+    else if (totalScore >= 9) result = wellBeingQuiz.recommendations[9];
+    else if (totalScore >= 6) result = wellBeingQuiz.recommendations[6];
+    else result = wellBeingQuiz.recommendations[3];
+
+    document.getElementById('quizContent').classList.add('hidden');
+    document.getElementById('resultsScreen').classList.remove('hidden');
+
+    document.getElementById('moodEmoji').textContent = result.emoji;
+    document.getElementById('finalScore').textContent = `${Math.round(totalScore * 10) / 10}/15`;
+
+    const list = document.getElementById('recommendationsList');
+    list.innerHTML = '';
+    result.tips.forEach(tip => {
+        const li = document.createElement('li');
+        li.innerHTML = `<i class="fas fa-check-circle"></i> ${tip}`;
+        list.appendChild(li);
+    });
+
+    window.lastQuizResult = {
+        score: totalScore,
+        title: result.title,
+        emoji: result.emoji
+    };
+}
+
+function initQuiz() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const closeBtn = document.getElementById('closeQuizBtn');
+    const quizScreen = document.getElementById('fullscreenQuiz');
+
+    prevBtn.style.display = 'none';
+
+    nextBtn.addEventListener('click', function() {
+        showResults();
+    });
+
+    closeBtn.addEventListener('click', function() {
+        quizScreen.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        showResultCircle();
+    });
+}
+
+function showResultCircle() {
+    if (!window.lastQuizResult) return;
+
+    const mainCircle = document.getElementById('mainCircle');
+    const resultCircle = document.getElementById('resultCircle');
+
+    document.getElementById('resultEmoji').textContent = window.lastQuizResult.emoji;
+    document.getElementById('resultTitle').textContent = window.lastQuizResult.title;
+    document.getElementById('resultScore').textContent = `${Math.round(window.lastQuizResult.score * 10) / 10}/15`;
+
+    mainCircle.classList.add('hidden');
+    resultCircle.classList.remove('hidden');
+}
+
+function resetQuiz() {
+    const mainCircle = document.getElementById('mainCircle');
+    const resultCircle = document.getElementById('resultCircle');
+    const quizScreen = document.getElementById('fullscreenQuiz');
+
+    resultCircle.classList.add('hidden');
+    mainCircle.classList.remove('hidden');
+
+    quizScreen.classList.remove('active');
+    document.getElementById('quizContent').classList.remove('hidden');
+    document.getElementById('resultsScreen').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+
+    delete window.lastQuizResult;
+}
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
