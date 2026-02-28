@@ -954,7 +954,7 @@
         <i class="fas fa-layer-group"></i> УПРАВЛЕНИЕ ВИДЖЕТАМИ
     </button>
     
-    <!-- Виджеты -->
+       <!-- Виджеты -->
     <div class="widgets-area" id="widgetsArea">
         <!-- Задачи -->
         <div class="widget" id="tasksWidget">
@@ -980,6 +980,38 @@
             <div class="world-time" id="worldTimeContent"></div>
         </div>
         
+        <!-- Виджет психологического состояния -->
+        <div class="widget" id="psychologicalWidget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="fas fa-brain"></i> ПСИХОЛОГИЧЕСКОЕ СОСТОЯНИЕ
+                </h3>
+                <div class="widget-controls">
+                    <button class="widget-btn start-psych-btn" id="startPsychBtn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="widget-btn refresh-psych-btn" id="refreshPsychBtn" style="display: none;">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="widget-btn close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content" id="psychologicalContent">
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-brain" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                        Оцените своё состояние для получения метрик уверенности и стабильности
+                    </p>
+                    <button class="quiz-btn" id="startPsychologicalBtn" style="width: 100%;">
+                        <i class="fas fa-play"></i> НАЧАТЬ ОЦЕНКУ
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div> <!-- Закрывающий тег widgets-area -->
         <!-- Советы -->
         <div class="widget" id="recWidget">
             <div class="widget-header">
