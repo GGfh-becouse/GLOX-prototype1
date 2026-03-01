@@ -12,43 +12,6 @@
     <style>
         /* ========== ОСНОВНЫЕ СТИЛИ ========== */
         :root {
-            /* Глобальные настройки шрифтов */
-* {
-    font-family: inherit;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    font-family: var(--font-main, 'Oswald', sans-serif);
-}
-
-/* Принудительное наследование для всех элементов */
-.widget, 
-.widget *,
-.world-time,
-.time-zone,
-.time-display,
-.time-city,
-.coordinate-grid,
-.category-values,
-.value-badge,
-.mood-emojis,
-.quiz-option,
-.quiz-btn,
-input, button, select, textarea {
-    font-family: var(--font-main, 'Oswald', sans-serif) !important;
-}
-
-/* Специально для цифр */
-.time-display,
-.mood-score,
-.slider-value,
-.value-badge span {
-    font-family: var(--font-main, 'Oswald', sans-serif);
-    font-weight: 400;
-}
             --primary: #FF6B35;
             --primary-dark: #D45A2C;
             --primary-light: #FF8C5A;
@@ -81,22 +44,47 @@ input, button, select, textarea {
             --card-bg: #FFFFFF;
         }
         
+        /* Глобальные настройки шрифтов */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: var(--font-main);
-            font-weight: 400;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: inherit;
         }
         
-        body {
+        html, body {
+            font-family: var(--font-main, 'Oswald', sans-serif);
             background: var(--theme-bg);
             color: var(--theme-text);
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
             position: relative;
+        }
+        
+        /* Принудительное наследование для всех элементов */
+        .widget, 
+        .widget *,
+        .world-time,
+        .time-zone,
+        .time-display,
+        .time-city,
+        .coordinate-grid,
+        .category-values,
+        .value-badge,
+        .mood-emojis,
+        .quiz-option,
+        .quiz-btn,
+        input, button, select, textarea {
+            font-family: var(--font-main, 'Oswald', sans-serif) !important;
+        }
+        
+        .time-display,
+        .mood-score,
+        .slider-value,
+        .value-badge span {
+            font-family: var(--font-main, 'Oswald', sans-serif);
+            font-weight: 400;
         }
         
         .hidden {
@@ -140,6 +128,140 @@ input, button, select, textarea {
             border-color: var(--primary);
         }
         
+        /* Кнопка доната */
+        .donate-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 107, 53, 0.15);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+        
+        .donate-button:hover {
+            background: rgba(255, 107, 53, 0.25);
+            color: var(--primary);
+            transform: scale(1.05);
+            border-color: rgba(255, 107, 53, 0.4);
+        }
+        
+        /* Кнопки экспорта/импорта */
+        .data-controls {
+            position: fixed;
+            top: 20px;
+            left: 140px;
+            display: flex;
+            gap: 8px;
+            z-index: 99;
+        }
+        
+        .data-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .data-btn:hover {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--primary);
+            transform: scale(1.1);
+            border-color: rgba(255, 107, 53, 0.4);
+        }
+        
+        /* Модальное окно доната */
+        .donate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 1001;
+        }
+        
+        .donate-modal.active {
+            display: block;
+        }
+        
+        .donate-modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid var(--theme-border);
+            min-width: 300px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .donate-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--theme-border);
+        }
+        
+        .donate-modal-header h3 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+        
+        .donate-close {
+            color: var(--text-dim);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .donate-close:hover {
+            color: var(--primary);
+        }
+        
+        .donate-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .donate-btn {
+            padding: 12px 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .donate-btn:hover {
+            background: rgba(255, 107, 53, 0.2);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+        
         /* Логотип и заголовок */
         .logo-container {
             display: flex;
@@ -148,19 +270,14 @@ input, button, select, textarea {
             gap: 15px;
             margin-bottom: 20px;
             padding: 10px 0;
+            margin-left: 180px;
         }
         
         .logo-icon {
             width: 50px;
             height: 50px;
-            background: var(--primary);
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            font-weight: bold;
+            object-fit: cover;
             box-shadow: 0 0 20px var(--primary-glow);
         }
         
@@ -285,37 +402,6 @@ input, button, select, textarea {
             50% { transform: scale(1.2); box-shadow: 0 0 25px var(--primary); }
         }
         
-       /* Кнопки экспорта/импорта */
-.data-controls {
-    position: fixed;
-    top: 20px;
-    left: 120px;
-    display: flex;
-    gap: 8px;
-    z-index: 99;
-}
-
-.data-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255, 107, 53, 0.1);
-    border: 1px solid rgba(255, 107, 53, 0.2);
-    color: var(--text-secondary);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-}
-
-.data-btn:hover {
-    background: rgba(255, 107, 53, 0.2);
-    color: var(--primary);
-    transform: scale(1.1);
-    border-color: rgba(255, 107, 53, 0.4);
-}
         /* ========== СТИЛИ ДЛЯ ОПРОСНИКА ========== */
         .fullscreen-quiz {
             position: fixed;
@@ -667,16 +753,6 @@ input, button, select, textarea {
         }
         
         /* Виджеты */
-        <!-- Кнопки экспорта/импорта -->
-<div class="data-controls">
-    <button id="exportBtn" class="data-btn" title="Скачать результаты">
-        <i class="fas fa-download"></i>
-    </button>
-    <button id="importBtn" class="data-btn" title="Загрузить результаты">
-        <i class="fas fa-upload"></i>
-    </button>
-    <input type="file" id="importFile" accept=".json" style="display: none;">
-</div>
         .widgets-area {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -894,220 +970,18 @@ input, button, select, textarea {
             .quiz-container { padding: 20px; }
             .quiz-nav-buttons { flex-direction: column; }
             .quiz-nav-btn { width: 100%; }
-            .logo-container { flex-direction: column; gap: 10px; }
+            .logo-container { 
+                flex-direction: column; 
+                gap: 10px;
+                margin-left: 0;
+            }
             .logo-text { font-size: 2.2rem; }
             .glox-history { padding: 20px; }
             .coordinate-grid { width: 200px; height: 200px; }
-            // ========== ЭКСПОРТ/ИМПОРТ ДАННЫХ ==========
-const STORAGE_KEY = 'glox_test_history';
-const SCHEMA_VERSION = '1.0';
-
-// Генерация или получение userId
-function getUserId() {
-    let userId = localStorage.getItem('glox_user_id');
-    if (!userId) {
-        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('glox_user_id', userId);
-    }
-    return userId;
-}
-
-// Сохранение теста в историю
-function saveTestToHistory(testData) {
-    let history = loadTestHistory();
-    
-    // Проверка на дубликат
-    const isDuplicate = history.tests.some(t => 
-        t.testId === testData.testId && 
-        t.completionDate === testData.completionDate
-    );
-    
-    if (!isDuplicate) {
-        history.tests.push(testData);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-    }
-    
-    return history;
-}
-
-// Загрузка истории тестов
-function loadTestHistory() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        try {
-            return JSON.parse(saved);
-        } catch (e) {
-            console.error('Ошибка загрузки истории');
-        }
-    }
-    
-    return {
-        schemaVersion: SCHEMA_VERSION,
-        userId: getUserId(),
-        tests: []
-    };
-}
-
-// Экспорт результатов
-function exportResults() {
-    const history = loadTestHistory();
-    
-    // Добавляем текущую дату экспорта
-    const exportData = {
-        ...history,
-        exportDate: new Date().toISOString()
-    };
-    
-    // Формируем имя файла
-    const date = new Date();
-    const fileName = `Glox_results_${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}.json`;
-    
-    // Создаем и скачиваем файл
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    alert('Результаты успешно сохранены в файл');
-}
-
-// Импорт результатов
-function importResults(file) {
-    const reader = new FileReader();
-    
-    reader.onload = (e) => {
-        try {
-            const importedData = JSON.parse(e.target.result);
-            
-            // Валидация схемы
-            if (!importedData.schemaVersion || !importedData.userId || !importedData.tests) {
-                alert('Неверный формат файла. Отсутствуют обязательные поля.');
-                return;
+            .data-controls {
+                left: 20px;
+                top: 70px;
             }
-            
-            // Проверка версии
-            if (importedData.schemaVersion !== SCHEMA_VERSION) {
-                const confirm = window.confirm(
-                    `Файл имеет устаревшую версию (${importedData.schemaVersion}). Текущая версия: ${SCHEMA_VERSION}. Некоторые данные могут быть обработаны некорректно. Продолжить?`
-                );
-                if (!confirm) return;
-            }
-            
-            // Загружаем текущую историю
-            const currentHistory = loadTestHistory();
-            
-            // Мержим тесты (без дубликатов)
-            let addedCount = 0;
-            importedData.tests.forEach(importedTest => {
-                const exists = currentHistory.tests.some(t => 
-                    t.testId === importedTest.testId && 
-                    t.completionDate === importedTest.completionDate
-                );
-                
-                if (!exists) {
-                    currentHistory.tests.push(importedTest);
-                    addedCount++;
-                }
-            });
-            
-            // Сохраняем обновленную историю
-            currentHistory.schemaVersion = SCHEMA_VERSION;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentHistory));
-            
-            alert(`Данные успешно загружены. Добавлено ${addedCount} записей.`);
-            
-            // Обновляем интерфейс, если нужно
-            updateUIFromHistory(currentHistory);
-            
-        } catch (error) {
-            alert('Не удалось загрузить данные. Неверный формат файла.');
-            console.error(error);
-        }
-    };
-    
-    reader.readAsText(file);
-}
-
-// Обновление интерфейса из истории
-function updateUIFromHistory(history) {
-    if (!history.tests.length) return;
-    
-    // Берем последний тест
-    const lastTest = history.tests[history.tests.length - 1];
-    
-    if (lastTest.results) {
-        // Обновляем координаты на главном круге
-        if (lastTest.results.x !== undefined && lastTest.results.y !== undefined) {
-            // Здесь код для обновления интерфейса
-            console.log('Последние результаты:', lastTest.results);
-        }
-    }
-}
-
-// Сохранение текущего теста в историю
-function saveCurrentTestToHistory() {
-    const totalScore = wellBeingQuiz.calculateTotalScore();
-    const result = wellBeingQuiz.getResultByScore(totalScore);
-    
-    const testData = {
-        testId: 'test_' + Date.now(),
-        testName: 'Тест самочувствия',
-        completionDate: new Date().toISOString(),
-        answers: wellBeingQuiz.categories.map(cat => ({
-            questionId: cat.id,
-            answer: { x: cat.x, y: cat.y },
-            category: cat.name
-        })),
-        results: {
-            x: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.x, 0) / 3,
-            y: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.y, 0) / 3,
-            category: result.title,
-            score: parseFloat(totalScore)
-        }
-    };
-    
-    saveTestToHistory(testData);
-}
-
-// Инициализация
-function initDataControls() {
-    const exportBtn = document.getElementById('exportBtn');
-    const importBtn = document.getElementById('importBtn');
-    const importFile = document.getElementById('importFile');
-    
-    if (!exportBtn || !importBtn || !importFile) return;
-    
-    exportBtn.addEventListener('click', exportResults);
-    
-    importBtn.addEventListener('click', () => {
-        importFile.click();
-    });
-    
-    importFile.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            importResults(e.target.files[0]);
-            importFile.value = ''; // Сбрасываем для возможности повторной загрузки того же файла
-        }
-    });
-    
-    // Загружаем историю при старте
-    const history = loadTestHistory();
-    if (history.tests.length > 0) {
-        updateUIFromHistory(history);
-    }
-}
-
-// Модифицируем функцию showResults для сохранения теста
-const originalShowResults = showResults;
-showResults = function() {
-    originalShowResults();
-    saveCurrentTestToHistory();
-};
         }
     </style>
 </head>
@@ -1122,9 +996,34 @@ showResults = function() {
         </button>
     </div>
     
+    <!-- Кнопка доната -->
+    <a href="#" id="donateButton" class="donate-button">💖 Поддержать</a>
+    
+    <!-- Кнопки экспорта/импорта -->
+    <div class="data-controls">
+        <button id="exportBtn" class="data-btn" title="Скачать результаты">
+            <i class="fas fa-download"></i>
+        </button>
+        <button id="importBtn" class="data-btn" title="Загрузить результаты">
+            <i class="fas fa-upload"></i>
+        </button>
+        <input type="file" id="importFile" accept=".json" style="display: none;">
+    </div>
+    
+    <!-- Модальное окно доната -->
+    <div id="donateModal" class="donate-modal">
+        <div class="donate-modal-content">
+            <div class="donate-modal-header">
+                <h3>Выберите сумму</h3>
+                <span class="donate-close">&times;</span>
+            </div>
+            <div class="donate-buttons" id="donateButtons"></div>
+        </div>
+    </div>
+    
     <!-- Логотип -->
     <div class="logo-container">
-        <div class="logo-icon">G</div>
+        <img src="logo.png" class="logo-icon" alt="GLOX">
         <h1 class="logo-text">GLOX</h1>
     </div>
     
@@ -1542,6 +1441,224 @@ showResults = function() {
                 { title: 'Философия GLOX', description: 'Помните: всё что может произойти — произойдет', icon: 'fas fa-brain' }
             ]
         };
+
+        // ========== ДОНАТ ==========
+        const donateConfig = {
+            amounts: [
+                { value: 200, label: '200₸', url: 'https://lonationalerts.com/pay?amount=200' },
+                { value: 500, label: '500₸', url: 'https://lonationalerts.com/pay?amount=500' },
+                { value: 1000, label: '1000₸', url: 'https://lonationalerts.com/pay?amount=1000' },
+                { value: 2000, label: '2000₸', url: 'https://lonationalerts.com/pay?amount=2000' }
+            ]
+        };
+
+        function initDonate() {
+            const donateBtn = document.getElementById('donateButton');
+            const modal = document.getElementById('donateModal');
+            const closeBtn = document.querySelector('.donate-close');
+            const buttonsContainer = document.getElementById('donateButtons');
+            
+            if (!donateBtn || !modal || !closeBtn || !buttonsContainer) return;
+            
+            function renderDonateButtons() {
+                buttonsContainer.innerHTML = '';
+                donateConfig.amounts.forEach(amount => {
+                    const btn = document.createElement('button');
+                    btn.className = 'donate-btn';
+                    btn.textContent = amount.label;
+                    btn.dataset.url = amount.url;
+                    
+                    btn.addEventListener('click', () => {
+                        window.open(btn.dataset.url, '_blank');
+                        modal.classList.remove('active');
+                    });
+                    
+                    buttonsContainer.appendChild(btn);
+                });
+            }
+            
+            donateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderDonateButtons();
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // ========== ЭКСПОРТ/ИМПОРТ ДАННЫХ ==========
+        const STORAGE_KEY = 'glox_test_history';
+        const SCHEMA_VERSION = '1.0';
+
+        function getUserId() {
+            let userId = localStorage.getItem('glox_user_id');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('glox_user_id', userId);
+            }
+            return userId;
+        }
+
+        function saveTestToHistory(testData) {
+            let history = loadTestHistory();
+            
+            const isDuplicate = history.tests.some(t => 
+                t.testId === testData.testId && 
+                t.completionDate === testData.completionDate
+            );
+            
+            if (!isDuplicate) {
+                history.tests.push(testData);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            }
+            
+            return history;
+        }
+
+        function loadTestHistory() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('Ошибка загрузки истории');
+                }
+            }
+            
+            return {
+                schemaVersion: SCHEMA_VERSION,
+                userId: getUserId(),
+                tests: []
+            };
+        }
+
+        function exportResults() {
+            const history = loadTestHistory();
+            
+            const exportData = {
+                ...history,
+                exportDate: new Date().toISOString()
+            };
+            
+            const date = new Date();
+            const fileName = `Glox_results_${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}.json`;
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Результаты успешно сохранены в файл');
+        }
+
+        function importResults(file) {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.schemaVersion || !importedData.userId || !importedData.tests) {
+                        alert('Неверный формат файла. Отсутствуют обязательные поля.');
+                        return;
+                    }
+                    
+                    if (importedData.schemaVersion !== SCHEMA_VERSION) {
+                        const confirm = window.confirm(
+                            `Файл имеет устаревшую версию (${importedData.schemaVersion}). Текущая версия: ${SCHEMA_VERSION}. Некоторые данные могут быть обработаны некорректно. Продолжить?`
+                        );
+                        if (!confirm) return;
+                    }
+                    
+                    const currentHistory = loadTestHistory();
+                    
+                    let addedCount = 0;
+                    importedData.tests.forEach(importedTest => {
+                        const exists = currentHistory.tests.some(t => 
+                            t.testId === importedTest.testId && 
+                            t.completionDate === importedTest.completionDate
+                        );
+                        
+                        if (!exists) {
+                            currentHistory.tests.push(importedTest);
+                            addedCount++;
+                        }
+                    });
+                    
+                    currentHistory.schemaVersion = SCHEMA_VERSION;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentHistory));
+                    
+                    alert(`Данные успешно загружены. Добавлено ${addedCount} записей.`);
+                    
+                } catch (error) {
+                    alert('Не удалось загрузить данные. Неверный формат файла.');
+                    console.error(error);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function saveCurrentTestToHistory() {
+            const totalScore = wellBeingQuiz.calculateTotalScore();
+            const result = wellBeingQuiz.getResultByScore(totalScore);
+            
+            const testData = {
+                testId: 'test_' + Date.now(),
+                testName: 'Тест самочувствия',
+                completionDate: new Date().toISOString(),
+                answers: wellBeingQuiz.categories.map(cat => ({
+                    questionId: cat.id,
+                    answer: { x: cat.x, y: cat.y },
+                    category: cat.name
+                })),
+                results: {
+                    x: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.x, 0) / 3,
+                    y: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.y, 0) / 3,
+                    category: result.title,
+                    score: parseFloat(totalScore)
+                }
+            };
+            
+            saveTestToHistory(testData);
+        }
+
+        function initDataControls() {
+            const exportBtn = document.getElementById('exportBtn');
+            const importBtn = document.getElementById('importBtn');
+            const importFile = document.getElementById('importFile');
+            
+            if (!exportBtn || !importBtn || !importFile) return;
+            
+            exportBtn.addEventListener('click', exportResults);
+            
+            importBtn.addEventListener('click', () => {
+                importFile.click();
+            });
+            
+            importFile.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    importResults(e.target.files[0]);
+                    importFile.value = '';
+                }
+            });
+        }
 
         // ========== ВИДЖЕТ ПСИХОЛОГИЧЕСКОГО СОСТОЯНИЯ ==========
         const gloxSessionState = {
@@ -1982,6 +2099,9 @@ showResults = function() {
                 title: result.title,
                 emoji: result.emoji
             };
+            
+            // Сохраняем тест в историю
+            saveCurrentTestToHistory();
         }
 
         function resetQuiz() {
@@ -2561,6 +2681,8 @@ showResults = function() {
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
+            initDonate();
+            initDataControls();
             
             // Основной опросник
             const mainCircle = document.getElementById('mainCircle');
