@@ -285,6 +285,37 @@ input, button, select, textarea {
             50% { transform: scale(1.2); box-shadow: 0 0 25px var(--primary); }
         }
         
+       /* Кнопки экспорта/импорта */
+.data-controls {
+    position: fixed;
+    top: 20px;
+    left: 120px;
+    display: flex;
+    gap: 8px;
+    z-index: 99;
+}
+
+.data-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.2);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.data-btn:hover {
+    background: rgba(255, 107, 53, 0.2);
+    color: var(--primary);
+    transform: scale(1.1);
+    border-color: rgba(255, 107, 53, 0.4);
+}
         /* ========== СТИЛИ ДЛЯ ОПРОСНИКА ========== */
         .fullscreen-quiz {
             position: fixed;
@@ -867,6 +898,216 @@ input, button, select, textarea {
             .logo-text { font-size: 2.2rem; }
             .glox-history { padding: 20px; }
             .coordinate-grid { width: 200px; height: 200px; }
+            // ========== ЭКСПОРТ/ИМПОРТ ДАННЫХ ==========
+const STORAGE_KEY = 'glox_test_history';
+const SCHEMA_VERSION = '1.0';
+
+// Генерация или получение userId
+function getUserId() {
+    let userId = localStorage.getItem('glox_user_id');
+    if (!userId) {
+        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('glox_user_id', userId);
+    }
+    return userId;
+}
+
+// Сохранение теста в историю
+function saveTestToHistory(testData) {
+    let history = loadTestHistory();
+    
+    // Проверка на дубликат
+    const isDuplicate = history.tests.some(t => 
+        t.testId === testData.testId && 
+        t.completionDate === testData.completionDate
+    );
+    
+    if (!isDuplicate) {
+        history.tests.push(testData);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+    
+    return history;
+}
+
+// Загрузка истории тестов
+function loadTestHistory() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try {
+            return JSON.parse(saved);
+        } catch (e) {
+            console.error('Ошибка загрузки истории');
+        }
+    }
+    
+    return {
+        schemaVersion: SCHEMA_VERSION,
+        userId: getUserId(),
+        tests: []
+    };
+}
+
+// Экспорт результатов
+function exportResults() {
+    const history = loadTestHistory();
+    
+    // Добавляем текущую дату экспорта
+    const exportData = {
+        ...history,
+        exportDate: new Date().toISOString()
+    };
+    
+    // Формируем имя файла
+    const date = new Date();
+    const fileName = `Glox_results_${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}.json`;
+    
+    // Создаем и скачиваем файл
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    alert('Результаты успешно сохранены в файл');
+}
+
+// Импорт результатов
+function importResults(file) {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            
+            // Валидация схемы
+            if (!importedData.schemaVersion || !importedData.userId || !importedData.tests) {
+                alert('Неверный формат файла. Отсутствуют обязательные поля.');
+                return;
+            }
+            
+            // Проверка версии
+            if (importedData.schemaVersion !== SCHEMA_VERSION) {
+                const confirm = window.confirm(
+                    `Файл имеет устаревшую версию (${importedData.schemaVersion}). Текущая версия: ${SCHEMA_VERSION}. Некоторые данные могут быть обработаны некорректно. Продолжить?`
+                );
+                if (!confirm) return;
+            }
+            
+            // Загружаем текущую историю
+            const currentHistory = loadTestHistory();
+            
+            // Мержим тесты (без дубликатов)
+            let addedCount = 0;
+            importedData.tests.forEach(importedTest => {
+                const exists = currentHistory.tests.some(t => 
+                    t.testId === importedTest.testId && 
+                    t.completionDate === importedTest.completionDate
+                );
+                
+                if (!exists) {
+                    currentHistory.tests.push(importedTest);
+                    addedCount++;
+                }
+            });
+            
+            // Сохраняем обновленную историю
+            currentHistory.schemaVersion = SCHEMA_VERSION;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentHistory));
+            
+            alert(`Данные успешно загружены. Добавлено ${addedCount} записей.`);
+            
+            // Обновляем интерфейс, если нужно
+            updateUIFromHistory(currentHistory);
+            
+        } catch (error) {
+            alert('Не удалось загрузить данные. Неверный формат файла.');
+            console.error(error);
+        }
+    };
+    
+    reader.readAsText(file);
+}
+
+// Обновление интерфейса из истории
+function updateUIFromHistory(history) {
+    if (!history.tests.length) return;
+    
+    // Берем последний тест
+    const lastTest = history.tests[history.tests.length - 1];
+    
+    if (lastTest.results) {
+        // Обновляем координаты на главном круге
+        if (lastTest.results.x !== undefined && lastTest.results.y !== undefined) {
+            // Здесь код для обновления интерфейса
+            console.log('Последние результаты:', lastTest.results);
+        }
+    }
+}
+
+// Сохранение текущего теста в историю
+function saveCurrentTestToHistory() {
+    const totalScore = wellBeingQuiz.calculateTotalScore();
+    const result = wellBeingQuiz.getResultByScore(totalScore);
+    
+    const testData = {
+        testId: 'test_' + Date.now(),
+        testName: 'Тест самочувствия',
+        completionDate: new Date().toISOString(),
+        answers: wellBeingQuiz.categories.map(cat => ({
+            questionId: cat.id,
+            answer: { x: cat.x, y: cat.y },
+            category: cat.name
+        })),
+        results: {
+            x: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.x, 0) / 3,
+            y: wellBeingQuiz.categories.reduce((acc, cat) => acc + cat.y, 0) / 3,
+            category: result.title,
+            score: parseFloat(totalScore)
+        }
+    };
+    
+    saveTestToHistory(testData);
+}
+
+// Инициализация
+function initDataControls() {
+    const exportBtn = document.getElementById('exportBtn');
+    const importBtn = document.getElementById('importBtn');
+    const importFile = document.getElementById('importFile');
+    
+    if (!exportBtn || !importBtn || !importFile) return;
+    
+    exportBtn.addEventListener('click', exportResults);
+    
+    importBtn.addEventListener('click', () => {
+        importFile.click();
+    });
+    
+    importFile.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            importResults(e.target.files[0]);
+            importFile.value = ''; // Сбрасываем для возможности повторной загрузки того же файла
+        }
+    });
+    
+    // Загружаем историю при старте
+    const history = loadTestHistory();
+    if (history.tests.length > 0) {
+        updateUIFromHistory(history);
+    }
+}
+
+// Модифицируем функцию showResults для сохранения теста
+const originalShowResults = showResults;
+showResults = function() {
+    originalShowResults();
+    saveCurrentTestToHistory();
+};
         }
     </style>
 </head>
