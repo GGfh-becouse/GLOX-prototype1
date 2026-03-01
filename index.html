@@ -12,6 +12,43 @@
     <style>
         /* ========== ОСНОВНЫЕ СТИЛИ ========== */
         :root {
+            /* Глобальные настройки шрифтов */
+* {
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: var(--font-main, 'Oswald', sans-serif);
+}
+
+/* Принудительное наследование для всех элементов */
+.widget, 
+.widget *,
+.world-time,
+.time-zone,
+.time-display,
+.time-city,
+.coordinate-grid,
+.category-values,
+.value-badge,
+.mood-emojis,
+.quiz-option,
+.quiz-btn,
+input, button, select, textarea {
+    font-family: var(--font-main, 'Oswald', sans-serif) !important;
+}
+
+/* Специально для цифр */
+.time-display,
+.mood-score,
+.slider-value,
+.value-badge span {
+    font-family: var(--font-main, 'Oswald', sans-serif);
+    font-weight: 400;
+}
             --primary: #FF6B35;
             --primary-dark: #D45A2C;
             --primary-light: #FF8C5A;
