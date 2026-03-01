@@ -636,6 +636,16 @@ input, button, select, textarea {
         }
         
         /* Виджеты */
+        <!-- Кнопки экспорта/импорта -->
+<div class="data-controls">
+    <button id="exportBtn" class="data-btn" title="Скачать результаты">
+        <i class="fas fa-download"></i>
+    </button>
+    <button id="importBtn" class="data-btn" title="Загрузить результаты">
+        <i class="fas fa-upload"></i>
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+</div>
         .widgets-area {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
