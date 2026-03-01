@@ -1368,6 +1368,60 @@
                 { title: 'Философия GLOX', description: 'Помните: всё что может произойти — произойдет', icon: 'fas fa-brain' }
             ]
         };
+            // ========== ДОНАТ ==========
+    const donateConfig = {
+        amounts: [
+            { value: 200, label: '200₸', url: 'https://lonationalerts.com/pay?amount=200' },
+            { value: 500, label: '500₸', url: 'https://lonationalerts.com/pay?amount=500' },
+            { value: 1000, label: '1000₸', url: 'https://lonationalerts.com/pay?amount=1000' },
+            { value: 2000, label: '2000₸', url: 'https://lonationalerts.com/pay?amount=2000' }
+        ]
+    };
+
+    function initDonate() {
+        const donateBtn = document.getElementById('donateButton');
+        const modal = document.getElementById('donateModal');
+        const closeBtn = document.querySelector('.donate-close');
+        const buttonsContainer = document.getElementById('donateButtons');
+        
+        if (!donateBtn || !modal || !closeBtn || !buttonsContainer) return;
+        
+        function renderDonateButtons() {
+            buttonsContainer.innerHTML = '';
+            donateConfig.amounts.forEach(amount => {
+                const btn = document.createElement('button');
+                btn.className = 'donate-btn';
+                btn.textContent = amount.label;
+                btn.dataset.url = amount.url;
+                
+                btn.addEventListener('click', () => {
+                    window.open(btn.dataset.url, '_blank');
+                    modal.classList.remove('active');
+                });
+                
+                buttonsContainer.appendChild(btn);
+            });
+        }
+        
+        donateBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderDonateButtons();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
 
         // ========== ВИДЖЕТ ПСИХОЛОГИЧЕСКОГО СОСТОЯНИЯ ==========
         const gloxSessionState = {
