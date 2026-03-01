@@ -67,8 +67,33 @@
         }
         
         /* Управление темой */
-        /* Кнопка доната */
-.donate-button {
+        /* Кнопка доната */      
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--theme-border);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .theme-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }.donate-button {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -175,33 +200,6 @@
             display: flex;
             gap: 10px;
             z-index: 100;
-        }
-        
-        .theme-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--theme-border);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .theme-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .theme-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
         }
         <!-- Кнопка доната -->
 <a href="#" id="donateButton" class="donate-button">💖 Поддержать</a>
